@@ -955,15 +955,30 @@
             isPlaying = !isPlaying;
         });
 
-        // RSVP Form Handling
-        const rsvpForm = document.getElementById('rsvp-form');
-        rsvpForm.addEventListener('submit', (e) => {
+        rsvpForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const name = rsvpForm.querySelector('input[type="text"]').value;
             const attendance = rsvpForm.querySelector('input[name="attendance"]:checked').value;
-            
-            alert(`Рахмет, ${name}! Жауабыңыз қабылданды.`);
-            rsvpForm.reset();
+            const btn = rsvpForm.querySelector('.submit-btn');
+        
+            btn.textContent = 'ЖІБЕРІЛУДЕ...';
+            btn.disabled = true;
+        
+            try {
+                await fetch('https://script.google.com/macros/s/AKfycbwyknv_5DlwIvUZccDPoHY4-WcDr3jkfIpANeqKYLbf0YqJR5CP6FvRANJKStGDvxLo/exec', {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, attendance })
+                });
+                alert(`Рахмет, ${name}! Жауабыңыз қабылданды.`);
+                rsvpForm.reset();
+            } catch (err) {
+                alert('Қате болды, қайталап көріңіз.');
+            }
+        
+            btn.textContent = 'ЖІБЕРУ';
+            btn.disabled = false;
         });
 
         // Effects Logic
